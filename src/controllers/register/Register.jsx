@@ -5,6 +5,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import tokenChecker from '../../utils/TokenChecker';
 import validate from '../../utils/RegisterValidator';
 import { withSnackbar } from 'notistack';
+import Typography from '@material-ui/core/Typography';
 
  class Register extends Component {
 
@@ -82,7 +83,7 @@ import { withSnackbar } from 'notistack';
 
     return (
       <div className="base-container">
-          <div className="header">Crear nuevo administrador</div>
+         <Typography variant="h4" gutterBottom>Crear nuevo administrador</Typography>
           <div className="content">
             <div className="form">
               <div className="form-group">

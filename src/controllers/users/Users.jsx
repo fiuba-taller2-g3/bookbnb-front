@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/CheckCircle'
 import BlockIcon from '@material-ui/icons/Block'
 import ProfileIcon from '@material-ui/icons/AccountCircle'
+import UserProfile from './UserProfile'
 import "./users.scss"
 
 const StyledTableCell = withStyles((theme) => ({
@@ -38,7 +39,9 @@ class Users extends Component {
   constructor(props){
     super(props)
     this.state = {
-      usersData:[]
+      usersData: [],
+      showProfile: false,
+      userProfileData: {}
     };
 
     this.userTransform = this.userTransform.bind(this);
@@ -46,7 +49,10 @@ class Users extends Component {
     this.getUsers = this.getUsers.bind(this);
     this.handleApiUsersResponse = this.handleApiUsersResponse.bind(this);
     this.handleApiUserUpdateResponse = this.handleApiUserUpdateResponse.bind(this);
+    this.handleApiUserProfileResponse = this.handleApiUserProfileResponse.bind(this);
     this.updateUserStatus = this.updateUserStatus.bind(this);
+    this.handleOnClickViewProfile = this.handleOnClickViewProfile.bind(this);
+    this.handleShowProfile = this.handleShowProfile.bind(this)
   }
 
   usersTransform(response) {
@@ -58,7 +64,7 @@ class Users extends Component {
     return {
         id: user.id,
         email: user.email,
-        type: user.type,
+        type: user.type.toLowerCase(),
         state: state,
         isBlock: user.is_blocked
     }
@@ -85,6 +91,17 @@ class Users extends Component {
       this.getUsers()
     } 
   }
+
+  handleApiUserProfileResponse(response) {
+    if (response.error) {
+      console.error("There was an error!", response.error)
+      this.handleAlertStatus(response.error, 'error' )
+      this.props.history.push("/home");
+    } 
+    else {
+      this.setState( {userProfileData : response} )
+    }
+  }
     
   getUsers() { 
     if (tokenChecker()) {
@@ -103,6 +120,26 @@ class Users extends Component {
     else {
       this.props.history.push("/");
     }
+  }
+
+  getUserProfile(userId) {
+    if (tokenChecker()) {
+      const token = localStorage.getItem("token")
+      console.log("getting user_id:", userId)
+      const url =`https://facade-server-develop.herokuapp.com/users/${userId}`
+      const requestConfig = {
+        mode: 'cors',
+        method: 'GET',
+        headers: {
+          'API_TOKEN': token
+        }
+      };
+      fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUserProfileResponse);
+    }
+    else {
+      this.props.history.push("/");
+    }
+
   }
 
   updateUserStatus(userId, userStatus) {
@@ -134,8 +171,20 @@ class Users extends Component {
     this.getUsers();
   }
 
+  handleShowProfile(event) {
+    this.setState({showProfile: event});
+  }
+
+  handleOnClickViewProfile(id){
+    console.log('ver perfil')
+    this.setState({showProfile: true});
+    this.getUserProfile(id)
+  }
+
   render() {
+    const showProfile = this.state.showProfile
     const users = this.state.usersData
+    const userProfileData = this.state.userProfileData
     return (
       <div className="user-list">
         <Container maxWidth="lg">
@@ -165,9 +214,12 @@ class Users extends Component {
                         color="primary"
                         className="button"
                         startIcon={<ProfileIcon/>}
+                        onClick={() => this.handleOnClickViewProfile(row.id)}
                       >
                         Ver perfil
                       </Button>
+                      
+                      {showProfile && <UserProfile user={userProfileData} showProfile={this.handleShowProfile}/>}
                     
                       {!row.isBlock && <Button
                         variant="contained"
