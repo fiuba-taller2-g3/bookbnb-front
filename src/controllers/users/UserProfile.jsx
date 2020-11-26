@@ -1,45 +1,32 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
 import Moment from 'moment';
 
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    position: 'relative'
+    
   },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1
+  }
+}));
 
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
 
 export default class UserProfile extends Component{
   constructor(props){
@@ -62,30 +49,51 @@ export default class UserProfile extends Component{
     
     return (
       <div>
-        <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={open}>
-          <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-            Perfil de usuario
-          </DialogTitle>
-          <DialogContent dividers>
-            <Typography gutterBottom>
-              Nombre: {user.name} 
-            </Typography>
-            <Typography gutterBottom>
-              Apellido: {user.surname}
-            </Typography>
-            <Typography gutterBottom>
-              Sexo: {user.gender}
-            </Typography>
-            <Typography gutterBottom>
-              Fecha de nacimiento: {birthDate}
-            </Typography>
-            <Typography gutterBottom>
-              Telefono: {user.phone_number}
-            </Typography>
-            <Typography gutterBottom>
-              Tipo de usuario: {user.type}
-            </Typography>
-          </DialogContent>
+        <Dialog
+          fullScreen
+          open={open}
+          onClose={this.handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar className={useStyles.appBar}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h6" className={useStyles.title}>Perfil de usuario</Typography>
+            </Toolbar>
+          </AppBar>
+          <div className="user-profile-title"></div>
+          <List>
+            <ListItem button>
+              <ListItemText primary="Nombre" secondary={user.name} />
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Apellido" secondary={user.surname}/>
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Email" secondary={user.email}/>
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Fecha de nacimiento" secondary={birthDate}/>
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Sexo" secondary={user.gender}/>
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Teléfono" secondary={user.phone_number}/>
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Tipo de usuario" secondary={user.type}/>
+            </ListItem>
+            <Divider />
+          </List>
         </Dialog>
       </div>
     );

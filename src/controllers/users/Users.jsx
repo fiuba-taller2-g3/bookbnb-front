@@ -14,6 +14,7 @@ import CheckIcon from '@material-ui/icons/CheckCircle'
 import BlockIcon from '@material-ui/icons/Block'
 import ProfileIcon from '@material-ui/icons/AccountCircle'
 import UserProfile from './UserProfile'
+import { withSnackbar } from 'notistack';
 import "./users.scss"
 
 const StyledTableCell = withStyles((theme) => ({
@@ -53,6 +54,7 @@ class Users extends Component {
     this.updateUserStatus = this.updateUserStatus.bind(this);
     this.handleOnClickViewProfile = this.handleOnClickViewProfile.bind(this);
     this.handleShowProfile = this.handleShowProfile.bind(this)
+    this.handleAlertStatus = this.handleAlertStatus.bind(this);
   }
 
   usersTransform(response) {
@@ -68,6 +70,10 @@ class Users extends Component {
         state: state,
         isBlock: user.is_blocked
     }
+  }
+
+  handleAlertStatus = (message, status) => {
+    this.props.enqueueSnackbar(message, {variant: status})
   }
 
   handleApiUsersResponse(response) {
@@ -186,70 +192,71 @@ class Users extends Component {
     const users = this.state.usersData
     const userProfileData = this.state.userProfileData
     return (
-      <div className="user-list">
-        <Container maxWidth="lg">
-          <TableContainer component={Paper}>
-            <Table className="table" aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Id</StyledTableCell>
-                  <StyledTableCell align="center">Email</StyledTableCell>
-                  <StyledTableCell align="center">Tipo&nbsp;</StyledTableCell>
-                  <StyledTableCell align="center">Estado&nbsp;</StyledTableCell>
-                  <StyledTableCell align="center">Acciones</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((row) => (
-                  <StyledTableRow key={row.id}>
-                    <StyledTableCell component="th" scope="row">{row.id}</StyledTableCell>
-                    <StyledTableCell align="center">{row.email}</StyledTableCell>
-                    <StyledTableCell align="center">{row.type}</StyledTableCell>
-                    <StyledTableCell align="center">{row.state}</StyledTableCell>
-                    <StyledTableCell align="center">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        margin-right="4px"
-                        color="primary"
-                        className="button"
-                        startIcon={<ProfileIcon/>}
-                        onClick={() => this.handleOnClickViewProfile(row.id)}
-                      >
-                        Ver perfil
-                      </Button>
-                      
-                      {showProfile && <UserProfile user={userProfileData} showProfile={this.handleShowProfile}/>}
-                    
-                      {!row.isBlock && <Button
-                        variant="contained"
-                        size="small"
-                        color="secondary"
-                        className="button"
-                        startIcon={<BlockIcon />}
-                        onClick={() => this.updateUserStatus(row.id, true)}
-                      >
-                        Bloquear
-                      </Button>}
-
-                      {row.isBlock &&
+      <div>
+        <div className="user-list">
+          <Container maxWidth="lg">
+            <TableContainer component={Paper}>
+              <Table className="table" aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Id</StyledTableCell>
+                    <StyledTableCell align="center">Email</StyledTableCell>
+                    <StyledTableCell align="center">Tipo&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Estado&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Acciones</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.map((row) => (
+                    <StyledTableRow key={row.id}>
+                      <StyledTableCell component="th" scope="row">{row.id}</StyledTableCell>
+                      <StyledTableCell align="center">{row.email}</StyledTableCell>
+                      <StyledTableCell align="center">{row.type}</StyledTableCell>
+                      <StyledTableCell align="center">{row.state}</StyledTableCell>
+                      <StyledTableCell align="center">
                         <Button
                           variant="contained"
                           size="small"
-                          color="default"
+                          margin-right="4px"
+                          color="primary"
                           className="button"
-                          startIcon={<CheckIcon />}
-                          onClick={() => this.updateUserStatus(row.id, false)}>
-                          Desbloquear
+                          startIcon={<ProfileIcon/>}
+                          onClick={() => this.handleOnClickViewProfile(row.id)}
+                        >
+                          Ver perfil
+                        </Button>
+                      
+                        {!row.isBlock && <Button
+                          variant="contained"
+                          size="small"
+                          color="secondary"
+                          className="button"
+                          startIcon={<BlockIcon />}
+                          onClick={() => this.updateUserStatus(row.id, true)}
+                        >
+                          Bloquear
                         </Button>}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Container>
+
+                        {row.isBlock &&
+                          <Button
+                            variant="contained"
+                            size="small"
+                            color="default"
+                            className="button"
+                            startIcon={<CheckIcon />}
+                            onClick={() => this.updateUserStatus(row.id, false)}>
+                            Desbloquear
+                          </Button>}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Container>
+        </div>
+        {showProfile && <UserProfile user={userProfileData} showProfile={this.handleShowProfile}/>}
       </div>
     );
   }
-} export default (Users)
+} export default withSnackbar(Users)
