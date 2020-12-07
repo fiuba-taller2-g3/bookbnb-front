@@ -10,16 +10,20 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
+import AccountIcon from "@material-ui/icons/AccountCircle";
+import GroupSharpIcon from '@material-ui/icons/GroupSharp';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
-import MailIcon from '@material-ui/icons/Mail';
 import Users from '../users/Users'
 import Register from '../register/Register'
-import "./home.scss";
+import createHistory from 'history/createBrowserHistory'
+
+export const history = createHistory()
 
 const drawerWidth = 240;
 
@@ -70,21 +74,35 @@ function HomeV2(props) {
     setTitle(title);
   };
 
+  const handleLogout = () => {
+    localStorage.clear()
+    history.push("/");
+    window.location.reload()
+  }
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button key="alta-admin" component={Link} to="/register" onClick={() => handleSetTitle("Registrar nuevo administrador")}>
-          <ListItemIcon><InboxIcon /></ListItemIcon>
-          <ListItemText primary="Registrar Administrador" />
+          <ListItem button key="home" component={Link} to="/home" onClick={() => handleSetTitle("Bienvenido a Bookbnb admin")}>
+            <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItemText primary="Inicio" />
           </ListItem>
-          <ListItem button key="usuarios" component={Link} to="/users" onClick={() => handleSetTitle("Lista de usuarios")}>
-          <ListItemIcon><MailIcon /></ListItemIcon>
-          <ListItemText primary="Ver usuarios" />
+          <ListItem button key="register" component={Link} to="/register" onClick={() => handleSetTitle("Registrar nuevo administrador")}>
+            <ListItemIcon><AccountIcon /></ListItemIcon>
+            <ListItemText primary="Registrar Administrador" />
+          </ListItem>
+          <ListItem button key="users" component={Link} to="/users" onClick={() => handleSetTitle("Lista de usuarios")}>
+            <ListItemIcon><GroupSharpIcon /></ListItemIcon>
+            <ListItemText primary="Ver usuarios" />
           </ListItem>
         </List>
         <Divider />
+        <ListItem button key="logout" component={Link} to="/" onClick={() => handleLogout()}>
+          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+          <ListItemText primary="Cerrar sesión" />
+        </ListItem>
     </div>
   );
 

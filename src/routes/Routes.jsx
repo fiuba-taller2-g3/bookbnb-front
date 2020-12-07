@@ -14,6 +14,8 @@ class Routes extends Component {
                     <Login {...props}/>
                 }/>
                 <PrivateRoute exact path={"/home"} component={Home}/>
+                <PrivateRoute exact path={"/register"} component={Home}/>
+                <PrivateRoute exact path={"/users"} component={Home}/>
             </Router>
         )
     }
