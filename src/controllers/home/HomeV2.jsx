@@ -19,6 +19,7 @@ import { SnackbarProvider } from 'notistack';
 import MailIcon from '@material-ui/icons/Mail';
 import Users from '../users/Users'
 import Register from '../register/Register'
+import "./home.scss";
 
 const drawerWidth = 240;
 
@@ -62,6 +63,7 @@ class HomeV2 extends Component {
     this.state = {
       mobileOpen: false,
     };
+
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this)
   }
 
@@ -94,16 +96,16 @@ class HomeV2 extends Component {
         <AppBar position="fixed" className={useStyles.appBar}>
           <Toolbar>
             <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={this.handleDrawerToggle}
-            className={useStyles.menuButton}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-              Permanent drawer
-          </Typography>
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={() => this.handleDrawerToggle()}
+              className={useStyles.menuButton}>
+             <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+                Permanent drawer
+            </Typography>
           </Toolbar>
         </AppBar>
         <div className="padding-app-bar"></div>
@@ -112,11 +114,10 @@ class HomeV2 extends Component {
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css">
             <Drawer
-              
               variant="temporary"
               anchor={theme.direction === "rtl" ? "right" : "left"}
               open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
+              onClose={() => this.handleDrawerToggle()}
               classes={{
                 paper: useStyles.drawerPaper
               }}
