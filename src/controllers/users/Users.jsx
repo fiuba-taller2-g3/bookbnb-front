@@ -15,6 +15,7 @@ import BlockIcon from '@material-ui/icons/Block'
 import ProfileIcon from '@material-ui/icons/AccountCircle'
 import UserProfile from './UserProfile'
 import { withSnackbar } from 'notistack';
+import createHistory from 'history/createBrowserHistory'
 import "./users.scss"
 
 const StyledTableCell = withStyles((theme) => ({
@@ -27,13 +28,15 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableCell);
 
-  const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
       },
     },
   }))(TableRow);
+
+export const history = createHistory()
 
 class Users extends Component {
 
@@ -66,7 +69,6 @@ class Users extends Component {
     return {
         id: user.id,
         email: user.email,
-        type: user.type.toLowerCase(),
         state: state,
         isBlock: user.is_blocked
     }
@@ -80,7 +82,7 @@ class Users extends Component {
     if (response.error) {
       console.error("There was an error!", response.error)
       this.handleAlertStatus(response.error, 'error' )
-      this.props.history.push("/home");
+      history.push("/home");
     } 
     else {
       this.setState( {usersData : this.usersTransform(response)} )
@@ -91,7 +93,7 @@ class Users extends Component {
     if (response.error) {
       console.error("There was an error!", response.error)
       this.handleAlertStatus(response.error, 'error' )
-      this.props.history.push("/home");
+      history.push("/home");
     }
     else {
       this.getUsers()
@@ -102,7 +104,7 @@ class Users extends Component {
     if (response.error) {
       console.error("There was an error!", response.error)
       this.handleAlertStatus(response.error, 'error' )
-      this.props.history.push("/home");
+      history.push("/home");
     } 
     else {
       this.setState( {userProfileData : response} )
@@ -124,7 +126,8 @@ class Users extends Component {
       fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUsersResponse);
     }
     else {
-      this.props.history.push("/");
+      history.push("/");
+      window.location.reload();
     }
   }
 
@@ -143,7 +146,8 @@ class Users extends Component {
       fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUserProfileResponse);
     }
     else {
-      this.props.history.push("/");
+      history.push("/");
+      window.location.reload();
     }
 
   }
@@ -169,7 +173,8 @@ class Users extends Component {
       fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUserUpdateResponse);
     }
     else {
-      this.props.history.push("/");
+      history.push("/");
+      window.location.reload();
     }
   }
 
@@ -201,7 +206,6 @@ class Users extends Component {
                   <TableRow>
                     <StyledTableCell>Id</StyledTableCell>
                     <StyledTableCell align="center">Email</StyledTableCell>
-                    <StyledTableCell align="center">Tipo&nbsp;</StyledTableCell>
                     <StyledTableCell align="center">Estado&nbsp;</StyledTableCell>
                     <StyledTableCell align="center">Acciones</StyledTableCell>
                   </TableRow>
@@ -211,7 +215,6 @@ class Users extends Component {
                     <StyledTableRow key={row.id}>
                       <StyledTableCell component="th" scope="row">{row.id}</StyledTableCell>
                       <StyledTableCell align="center">{row.email}</StyledTableCell>
-                      <StyledTableCell align="center">{row.type}</StyledTableCell>
                       <StyledTableCell align="center">{row.state}</StyledTableCell>
                       <StyledTableCell align="center">
                         <Button

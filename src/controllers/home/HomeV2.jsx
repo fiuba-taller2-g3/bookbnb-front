@@ -19,8 +19,6 @@ import { SnackbarProvider } from 'notistack';
 import MailIcon from '@material-ui/icons/Mail';
 import Users from '../users/Users'
 import Register from '../register/Register'
-import {PrivateRoute} from "../../routes/PrivateRoute";
-import Login from '../login/Login';
 
 const drawerWidth = 240;
 

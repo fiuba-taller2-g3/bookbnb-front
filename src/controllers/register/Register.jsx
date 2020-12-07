@@ -6,7 +6,14 @@ import tokenChecker from '../../utils/TokenChecker';
 import validate from '../../utils/RegisterValidator';
 import { withSnackbar } from 'notistack';
 import Typography from '@material-ui/core/Typography';
-import {Redirect } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory'
+
+
+export const history = createHistory()
+
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
  class Register extends Component {
 
@@ -20,6 +27,7 @@ import {Redirect } from 'react-router-dom';
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleApiResponse = this.handleApiResponse.bind(this);
     this.handleAlertStatus = this.handleAlertStatus.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentWillUnmount() {
@@ -40,7 +48,15 @@ import {Redirect } from 'react-router-dom';
     }
   }
 
-   handleAlertStatus = (message, status) => {
+  handleLogout(){
+    history.push("/")
+    this.handleAlertStatus('Caduco la sesión, inicie sesión nuevamente', 'info' )
+    sleep(1500).then(() => {
+      window.location.reload();
+    })
+  }
+
+  handleAlertStatus = (message, status) => {
     this.props.enqueueSnackbar(message, {variant: status})
   }
 
@@ -75,8 +91,14 @@ import {Redirect } from 'react-router-dom';
         e.target.reset()
       }
       else {
-        this.props.history.push("/");
+        this.handleLogout()
       }
+    }
+  }
+
+  componentDidMount() {
+    if (!tokenChecker()) {
+      this.handleLogout()
     }
   }
 
