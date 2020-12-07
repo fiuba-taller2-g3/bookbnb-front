@@ -107,7 +107,7 @@ const sleep = (milliseconds) => {
 
     return (
       <div className="base-container">
-         <Typography variant="h4" gutterBottom>Crear nuevo administrador</Typography>
+         <Typography variant="h4" gutterBottom> Nuevo administrador</Typography>
           <div className="content">
             <div className="form">
               <form onSubmit={this.handleSubmit}>
@@ -135,7 +135,7 @@ const sleep = (milliseconds) => {
                 <TextField error={errors.passwordConfirmed} type="password" name="passwordConfirmed" id="register-passwordConfirmed" label="Confirmar contraseña" variant="outlined" onChange={this.handleInputChange}/>
                 {errors.passwordConfirmed && <FormHelperText id="component-helper-text">{errors.passwordConfirmed}</FormHelperText>}
               </div>
-              <button type="submit" className=" button button-intro">Crear</button>
+              <button type="submit" className=" button button-intro">Registrar</button>
               </form>
             </div>
           </div>
