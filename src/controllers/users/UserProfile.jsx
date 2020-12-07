@@ -89,10 +89,6 @@ export default class UserProfile extends Component{
               <ListItemText primary="Teléfono" secondary={user.phone_number}/>
             </ListItem>
             <Divider />
-            <ListItem button>
-              <ListItemText primary="Tipo de usuario" secondary={user.type}/>
-            </ListItem>
-            <Divider />
           </List>
         </Dialog>
       </div>
