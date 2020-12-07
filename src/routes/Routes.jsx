@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import Home from "../controllers/home/Home";
+import Home from "../controllers/home/HomeV2";
 import Login from "../controllers/login/Login";
 import Register from "../controllers/register/Register";
 import Users from "../controllers/users/Users"

@@ -6,13 +6,14 @@ import tokenChecker from '../../utils/TokenChecker';
 import validate from '../../utils/RegisterValidator';
 import { withSnackbar } from 'notistack';
 import Typography from '@material-ui/core/Typography';
+import {Redirect } from 'react-router-dom';
 
  class Register extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      errors:{}
+      errors:{},
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -36,7 +37,6 @@ import Typography from '@material-ui/core/Typography';
     } 
     else {
         this.handleAlertStatus(response.msg, 'success' )
-        this.props.history.push("/home");
     }
   }
 
@@ -44,12 +44,13 @@ import Typography from '@material-ui/core/Typography';
     this.props.enqueueSnackbar(message, {variant: status})
   }
 
-  handleSubmit() {
+  handleSubmit = e => {
+    e.preventDefault()
     const { errors, ...whitoutErrors } = this.state
     const result = validate(whitoutErrors)
     this.setState({ errors: result })
 
-    if (!Object.keys(result).length) {    
+    if (!Object.keys(result).length) {
       if (tokenChecker()) {
         const token = localStorage.getItem("token")
         //Enviar formulario de registro
@@ -71,6 +72,7 @@ import Typography from '@material-ui/core/Typography';
           }
         };
         fetch(url, requestConfig).then(response => response.json()).then(this.handleApiResponse);
+        e.target.reset()
       }
       else {
         this.props.history.push("/");
@@ -86,6 +88,7 @@ import Typography from '@material-ui/core/Typography';
          <Typography variant="h4" gutterBottom>Crear nuevo administrador</Typography>
           <div className="content">
             <div className="form">
+              <form onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <TextField  error={errors.name} type="text" name="name" id="register-name" label="Nombre" variant="outlined" onChange={this.handleInputChange} />
                 {errors.name && <FormHelperText id="component-helper-text">{errors.name}</FormHelperText>}
@@ -110,7 +113,8 @@ import Typography from '@material-ui/core/Typography';
                 <TextField error={errors.passwordConfirmed} type="password" name="passwordConfirmed" id="register-passwordConfirmed" label="Confirmar contraseña" variant="outlined" onChange={this.handleInputChange}/>
                 {errors.passwordConfirmed && <FormHelperText id="component-helper-text">{errors.passwordConfirmed}</FormHelperText>}
               </div>
-              <button className=" button button-intro" onClick={this.handleSubmit}>Crear</button>
+              <button type="submit" className=" button button-intro">Crear</button>
+              </form>
             </div>
           </div>
       </div>
