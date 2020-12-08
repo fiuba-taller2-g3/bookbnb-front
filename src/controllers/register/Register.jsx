@@ -5,19 +5,29 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import tokenChecker from '../../utils/TokenChecker';
 import validate from '../../utils/RegisterValidator';
 import { withSnackbar } from 'notistack';
+import Typography from '@material-ui/core/Typography';
+import createHistory from 'history/createBrowserHistory'
+
+
+export const history = createHistory()
+
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
  class Register extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      errors:{}
+      errors:{},
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleApiResponse = this.handleApiResponse.bind(this);
     this.handleAlertStatus = this.handleAlertStatus.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentWillUnmount() {
@@ -35,20 +45,28 @@ import { withSnackbar } from 'notistack';
     } 
     else {
         this.handleAlertStatus(response.msg, 'success' )
-        this.props.history.push("/home");
     }
   }
 
-   handleAlertStatus = (message, status) => {
+  handleLogout(){
+    history.push("/")
+    this.handleAlertStatus('Caduco la sesión, inicie sesión nuevamente', 'info' )
+    sleep(1500).then(() => {
+      window.location.reload();
+    })
+  }
+
+  handleAlertStatus = (message, status) => {
     this.props.enqueueSnackbar(message, {variant: status})
   }
 
-  handleSubmit() {
+  handleSubmit = e => {
+    e.preventDefault()
     const { errors, ...whitoutErrors } = this.state
     const result = validate(whitoutErrors)
     this.setState({ errors: result })
 
-    if (!Object.keys(result).length) {    
+    if (!Object.keys(result).length) {
       if (tokenChecker()) {
         const token = localStorage.getItem("token")
         //Enviar formulario de registro
@@ -70,10 +88,17 @@ import { withSnackbar } from 'notistack';
           }
         };
         fetch(url, requestConfig).then(response => response.json()).then(this.handleApiResponse);
+        e.target.reset()
       }
       else {
-        this.props.history.push("/");
+        this.handleLogout()
       }
+    }
+  }
+
+  componentDidMount() {
+    if (!tokenChecker()) {
+      this.handleLogout()
     }
   }
 
@@ -82,9 +107,10 @@ import { withSnackbar } from 'notistack';
 
     return (
       <div className="base-container">
-          <div className="header">Crear nuevo administrador</div>
+         <Typography variant="h4" gutterBottom> Nuevo administrador</Typography>
           <div className="content">
             <div className="form">
+              <form onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <TextField  error={errors.name} type="text" name="name" id="register-name" label="Nombre" variant="outlined" onChange={this.handleInputChange} />
                 {errors.name && <FormHelperText id="component-helper-text">{errors.name}</FormHelperText>}
@@ -109,7 +135,8 @@ import { withSnackbar } from 'notistack';
                 <TextField error={errors.passwordConfirmed} type="password" name="passwordConfirmed" id="register-passwordConfirmed" label="Confirmar contraseña" variant="outlined" onChange={this.handleInputChange}/>
                 {errors.passwordConfirmed && <FormHelperText id="component-helper-text">{errors.passwordConfirmed}</FormHelperText>}
               </div>
-              <button className=" button button-intro" onClick={this.handleSubmit}>Crear</button>
+              <button type="submit" className=" button button-intro">Registrar</button>
+              </form>
             </div>
           </div>
       </div>

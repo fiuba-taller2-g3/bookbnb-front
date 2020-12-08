@@ -4,6 +4,7 @@
     align-items: center;
 
     .content{
+        margin-top:20px;
         .form{
             .form-group {
                 margin-bottom: 20px;
@@ -21,6 +22,8 @@
     font-family: "Open Sans", sans-serif; 
     margin-top: 40px;
     margin-bottom: 20px;
+    width: '100%';
+    max-width: 500,
 }
 
 .button {
