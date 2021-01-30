@@ -3,17 +3,13 @@ import "./register.scss";
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import tokenChecker from '../../utils/TokenChecker';
+import sleep from '../../utils/Sleep';
 import validate from '../../utils/RegisterValidator';
 import { withSnackbar } from 'notistack';
 import Typography from '@material-ui/core/Typography';
-import createHistory from 'history/createBrowserHistory'
-
+import createHistory  from 'history/createBrowserHistory'
 
 export const history = createHistory()
-
-const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
 
  class Register extends Component {
 

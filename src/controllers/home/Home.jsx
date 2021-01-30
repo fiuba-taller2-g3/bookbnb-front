@@ -16,11 +16,13 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountIcon from "@material-ui/icons/AccountCircle";
 import GroupSharpIcon from '@material-ui/icons/GroupSharp';
+import FilterIcon from '@material-ui/icons/Filter';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
 import Users from '../users/Users'
 import Register from '../register/Register'
+import Posts from '../posts/Posts'
 import createHistory from 'history/createBrowserHistory'
 
 export const history = createHistory()
@@ -93,9 +95,13 @@ function HomeV2(props) {
             <ListItemIcon><AccountIcon /></ListItemIcon>
             <ListItemText primary="Registrar Administrador" />
           </ListItem>
-          <ListItem button key="users" component={Link} to="/users" onClick={() => handleSetTitle("Lista de usuarios")}>
+          <ListItem button key="users" component={Link} to="/users" onClick={() => handleSetTitle("Usuarios")}>
             <ListItemIcon><GroupSharpIcon /></ListItemIcon>
             <ListItemText primary="Ver usuarios" />
+          </ListItem>
+          <ListItem button key="posts" component={Link} to="/posts" onClick={() => handleSetTitle("Publicaciones")}>
+            <ListItemIcon><FilterIcon /></ListItemIcon>
+            <ListItemText primary="Ver publicaciones" />
           </ListItem>
         </List>
         <Divider />
@@ -165,6 +171,7 @@ function HomeV2(props) {
               <Route exact path="/home" render={() => <div>Home Page</div>} />
               <Route path="/register" render={() => <Register/>} />
               <Route path="/users" render={() => <Users/>} />
+              <Route path="/posts" render={() => <Posts/>} />
             </SnackbarProvider>
           </Switch>
         </main>

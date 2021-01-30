@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import UsersClient from '../../clients/users/UsersClient'
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -9,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Container from '@material-ui/core/Container';
 import TableBody from '@material-ui/core/TableBody'
 import tokenChecker from '../../utils/TokenChecker';
+import sleep from '../../utils/Sleep';
 import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/CheckCircle'
 import BlockIcon from '@material-ui/icons/Block'
@@ -47,139 +49,82 @@ class Users extends Component {
       showProfile: false,
       userProfileData: {}
     };
-
-    this.userTransform = this.userTransform.bind(this);
-    this.usersTransform = this.usersTransform.bind(this);
-    this.getUsers = this.getUsers.bind(this);
-    this.handleApiUsersResponse = this.handleApiUsersResponse.bind(this);
-    this.handleApiUserUpdateResponse = this.handleApiUserUpdateResponse.bind(this);
-    this.handleApiUserProfileResponse = this.handleApiUserProfileResponse.bind(this);
-    this.updateUserStatus = this.updateUserStatus.bind(this);
+    
+    this.handleUsersResponse = this.handleUsersResponse.bind(this);
+    this.handleUserUpdateResponse = this.handleUserUpdateResponse.bind(this);
+    this.handleUserProfileResponse = this.handleUserProfileResponse.bind(this);
     this.handleOnClickViewProfile = this.handleOnClickViewProfile.bind(this);
     this.handleShowProfile = this.handleShowProfile.bind(this)
     this.handleAlertStatus = this.handleAlertStatus.bind(this);
-  }
-
-  usersTransform(response) {
-    return response.map(user => this.userTransform(user)).sort((a, b) => a.id - b.id);
-  }
-
-  userTransform(user) {
-    const state = user.is_blocked ? "bloqueado" : "activo"
-    return {
-        id: user.id,
-        email: user.email,
-        state: state,
-        isBlock: user.is_blocked
-    }
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleError = this.handleError.bind(this)
   }
 
   handleAlertStatus = (message, status) => {
     this.props.enqueueSnackbar(message, {variant: status})
   }
 
-  handleApiUsersResponse(response) {
-    if (response.error) {
-      console.error("There was an error!", response.error)
-      this.handleAlertStatus(response.error, 'error' )
-      history.push("/home");
+  handleUsersResponse(response) {
+    console.log(response)
+    if (response.status !== "ok") {
+      this.handleError(response.error)
     } 
     else {
-      this.setState( {usersData : this.usersTransform(response)} )
+      this.setState( { usersData : response.users } )
     }
   }
 
-  handleApiUserUpdateResponse(response) {
+  handleUserProfileResponse(response) {
     if (response.error) {
-      console.error("There was an error!", response.error)
-      this.handleAlertStatus(response.error, 'error' )
-      history.push("/home");
-    }
-    else {
-      this.getUsers()
-    } 
-  }
-
-  handleApiUserProfileResponse(response) {
-    if (response.error) {
-      console.error("There was an error!", response.error)
-      this.handleAlertStatus(response.error, 'error' )
-      history.push("/home");
+      this.handleError(response.error)
     } 
     else {
       this.setState( {userProfileData : response} )
     }
   }
+
+  handleUserUpdateResponse(response) {
+    if (response.error) {
+      this.handleError(response.error)
+    }
+    else {
+      this.getUsers()
+    } 
+  }
     
   getUsers() { 
     if (tokenChecker()) {
-      const token = localStorage.getItem("token")
-      console.log("token valido")
-      const url =`https://facade-server-develop.herokuapp.com/users`
-      const requestConfig = {
-        mode: 'cors',
-        method: 'GET',
-        headers: {
-          'API_TOKEN': token
-        }
-      };
-      fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUsersResponse);
-    }
-    else {
-      history.push("/");
-      window.location.reload();
-    }
+      UsersClient.getUsers().then(this.handleUsersResponse)
+    } 
+    else { this.handleLogout() }
   }
 
   getUserProfile(userId) {
     if (tokenChecker()) {
-      const token = localStorage.getItem("token")
-      console.log("getting user_id:", userId)
-      const url =`https://facade-server-develop.herokuapp.com/users/${userId}`
-      const requestConfig = {
-        mode: 'cors',
-        method: 'GET',
-        headers: {
-          'API_TOKEN': token
-        }
-      };
-      fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUserProfileResponse);
+      UsersClient.getUserProfile(userId).then(this.handleUserProfileResponse);
     }
-    else {
-      history.push("/");
-      window.location.reload();
-    }
-
+    else { this.handleLogout() }
   }
 
   updateUserStatus(userId, userStatus) {
-    const id = userId
-    const status = userStatus
     if (tokenChecker()) {
-      const token = localStorage.getItem("token")
-      console.log("updating user_id: ", id)
-      const url =`https://facade-server-develop.herokuapp.com/users/${id}`
-      const requestConfig = {
-        method: 'PATCH',
-        body: JSON.stringify({
-          is_blocked: status
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'API_TOKEN': token
-        }
-      };
-      
-      fetch(url, requestConfig).then(response => response.json()).then(this.handleApiUserUpdateResponse);
+      UsersClient.updateUserStatus(userId, userStatus).then(this.handleUserUpdateResponse);
     }
-    else {
-      history.push("/");
-      window.location.reload();
-    }
+    else { this.handleLogout() }
   }
 
   componentDidMount() {
     this.getUsers();
+  }
+
+  componentWillUnmount() {
+    this.getUsers();
+  }
+
+  handleError = (error) =>  {
+    console.error("There was an error!", error)
+    this.handleAlertStatus(error, 'error' )
+    history.push("/home");
   }
 
   handleShowProfile(event) {
@@ -190,6 +135,14 @@ class Users extends Component {
     console.log('ver perfil')
     this.setState({showProfile: true});
     this.getUserProfile(id)
+  }
+
+  handleLogout(){
+    history.push("/")
+    this.handleAlertStatus('Caduco la sesión, inicie sesión nuevamente', 'info' )
+    sleep(1500).then(() => {
+      window.location.reload();
+    })
   }
 
   render() {
