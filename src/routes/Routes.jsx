@@ -16,6 +16,7 @@ class Routes extends Component {
                 <PrivateRoute exact path={"/home"} component={Home}/>
                 <PrivateRoute exact path={"/register"} component={Home}/>
                 <PrivateRoute exact path={"/users"} component={Home}/>
+                <PrivateRoute exact path={"/posts"} component={Home}/>
             </Router>
         )
     }
