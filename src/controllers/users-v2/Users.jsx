@@ -12,8 +12,9 @@ import Actions from './ActionsButton'
 import { useSnackbar } from 'notistack';
 import sleep from '../../utils/Sleep';
 import tokenChecker from '../../utils/TokenChecker';
-import createHistory from 'history/createBrowserHistory'
-import UserView from './UserView'
+import createHistory from 'history/createBrowserHistory';
+import UserView from './UserView';
+import WalletView from '../wallet/Wallet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,9 @@ export const history = createHistory()
 export default function AlignItemsList(){
   const [usersData, setUsersData] = useState([])
   const [user, setUser] = useState({})
+  const [userId, setUserId] = useState({})
   const [showUser, setShowUser] = useState(false)
+  const [showWallet, setShowWallet] = useState(false)
   const [updateUser, setUpdateUser] = useState(false)
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -108,12 +111,23 @@ export default function AlignItemsList(){
   }
 
   const handleOpenUserView = (id, newState) => {
-      setShowUser(newState)
-      getUser(id)
+    setShowUser(newState)
+    getUser(id)
   }
+
+  const handleOpenWalletView = (id, newState) => {
+    setShowWallet(newState)
+    setUserId(id)
+    console.log("walletState:",newState)
+    console.log("userId wallet:", id)
+}
 
   const handleCloseUserView = (event) => {
     setShowUser(event)
+  }
+
+  const handleCloseWalletView = (event) => {
+    setShowWallet(event)
   }
 
   useEffect(() => {
@@ -144,7 +158,7 @@ export default function AlignItemsList(){
                 </React.Fragment>
               }
             />
-            <Actions showView={handleOpenUserView} userId={row.id} block={handleBlock} isBlock={row.isBlock}/>
+            <Actions showView={handleOpenUserView} showWallet={handleOpenWalletView} userId={row.id} block={handleBlock} isBlock={row.isBlock}/>
           </ListItem>
           <div>
             <Divider variant="inset" component="li" /> 
@@ -152,6 +166,7 @@ export default function AlignItemsList(){
         </div>
       )):""}
        {showUser && <UserView user={user} showUser={handleCloseUserView}/>}
+       {showWallet && <WalletView id={userId} open={true} showWallet={handleCloseWalletView}/>}
     </List>
   );
 }

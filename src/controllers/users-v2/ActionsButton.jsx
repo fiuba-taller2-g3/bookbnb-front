@@ -7,6 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BlockIcon from '@material-ui/icons/Block';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 const StyledMenu = withStyles({
   paper: {
@@ -102,7 +103,7 @@ export default function CustomizedMenus(props) {
         <MenuItem onClick={handleClickWallet}>
           <StyledMenuItem>
             <ListItemIcon>
-                <BlockIcon fontSize="small" />
+                <MonetizationOnIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Cargar saldo" />
           </StyledMenuItem>
