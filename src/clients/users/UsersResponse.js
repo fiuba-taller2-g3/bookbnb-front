@@ -5,7 +5,8 @@ const userTransform = (user) => {
     id: user.id,
     email: user.email,
     state: state,
-    isBlock: user.is_blocked
+    isBlock: user.is_blocked,
+    walletId: user.wallet_id
   }
 }
 

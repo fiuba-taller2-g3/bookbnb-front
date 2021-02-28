@@ -97,7 +97,7 @@ export default function AlignItemsList(){
 
   const getUser = (id) => {
     if (tokenChecker()) {
-      console.log('user_id:', id)
+      console.log('user_id:')
       UsersClient.getUserProfile(id).then(handleUserResponse)
     } 
     else { handleLogout() }
@@ -117,9 +117,10 @@ export default function AlignItemsList(){
 
   const handleOpenWalletView = (id, newState) => {
     setShowWallet(newState)
+    getUser(id)
     setUserId(id)
     console.log("walletState:",newState)
-    console.log("userId wallet:", id)
+    console.log("userId_wallet:", id)
 }
 
   const handleCloseUserView = (event) => {
@@ -166,7 +167,7 @@ export default function AlignItemsList(){
         </div>
       )):""}
        {showUser && <UserView user={user} showUser={handleCloseUserView}/>}
-       {showWallet && <WalletView id={userId} open={true} showWallet={handleCloseWalletView}/>}
+       {showWallet && <WalletView id={user.wallet_id} open={true} showWallet={handleCloseWalletView}/>}
     </List>
   );
 }

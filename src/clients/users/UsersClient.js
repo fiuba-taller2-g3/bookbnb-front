@@ -8,7 +8,7 @@ class UsersClient {
     this.getUserProfile = this.getUserProfile.bind(this);
     this.getUsers = this.getUsers.bind(this);
     this.updateUserStatus = this.updateUserStatus.bind(this)
-}
+  }
 
   getUsers = async () => { 
     const token = localStorage.getItem("token")
