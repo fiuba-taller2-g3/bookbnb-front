@@ -8,16 +8,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TransferenceClient  from '../../clients/transference/TransferenceClient';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { useSnackbar } from 'notistack';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
 
 export default function FormDialog(props) {
   const [amount, setAmount] = useState([])
   const [error, setError] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
   const { enqueueSnackbar } = useSnackbar()
-  const [loader, setLoader] = useState(false)
 
   const handleClose = () => {
     props.showWallet(false)
@@ -51,13 +47,11 @@ export default function FormDialog(props) {
     else {
       handleAlertStatus('Ocurrio un error', 'error' )
     }
-    setLoader(false)
   }
 
   const handleLoadMoney = () => {
     console.log("se carga el walletId:", props.id)
     if (validateValue()) {
-      setLoader(true)
       TransferenceClient.transfer(props.id, amount).then(handleApiResponse);
       handleClose()
     }
@@ -80,9 +74,6 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <Backdrop className="backdrop" open={loader}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </div>
   );
 }
