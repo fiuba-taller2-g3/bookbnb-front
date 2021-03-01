@@ -20,7 +20,7 @@ import FilterIcon from '@material-ui/icons/Filter';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
-import Users from '../users/Users'
+import Users from '../users-v2/Users'
 import Register from '../register/Register'
 import Posts from '../posts/Posts'
 import createHistory from 'history/createBrowserHistory'
