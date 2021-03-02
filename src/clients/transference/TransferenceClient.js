@@ -5,14 +5,14 @@ class TransferenceClient {
     this.transfer = this.transfer.bind(this);
   }
 
-  transfer = (userId, amount) => { 
+  transfer = (walletId, amount) => { 
     const token = localStorage.getItem("token")
     console.log("token valido")
     const requestConfig = {
       mode: 'cors',
       method: 'POST',
       body: JSON.stringify({
-        id: userId,
+        id: walletId,
         amount: amount
       }),
       headers: {

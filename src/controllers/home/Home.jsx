@@ -17,13 +17,16 @@ import HomeIcon from "@material-ui/icons/Home";
 import AccountIcon from "@material-ui/icons/AccountCircle";
 import GroupSharpIcon from '@material-ui/icons/GroupSharp';
 import FilterIcon from '@material-ui/icons/Filter';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
 import Users from '../users-v2/Users'
 import Register from '../register/Register'
 import Posts from '../posts/Posts'
+import Metrics from '../metrics/Metrics'
 import createHistory from 'history/createBrowserHistory'
+import Intro from "./Intro";
 
 export const history = createHistory()
 
@@ -87,7 +90,7 @@ function HomeV2(props) {
       <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button key="home" component={Link} to="/home" onClick={() => handleSetTitle("Bienvenido a Bookbnb admin")}>
+          <ListItem button key="home" component={Link} to="/home" onClick={() => handleSetTitle("Backoffice Bookbnb")}>
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Inicio" />
           </ListItem>
@@ -102,6 +105,10 @@ function HomeV2(props) {
           <ListItem button key="posts" component={Link} to="/posts" onClick={() => handleSetTitle("Publicaciones")}>
             <ListItemIcon><FilterIcon /></ListItemIcon>
             <ListItemText primary="Ver publicaciones" />
+          </ListItem>
+          <ListItem button key="metrics" component={Link} to="/metrics" onClick={() => handleSetTitle("Metricas de negocio")}>
+            <ListItemIcon><TimelineIcon /></ListItemIcon>
+            <ListItemText primary="Metricas" />
           </ListItem>
         </List>
         <Divider />
@@ -168,10 +175,11 @@ function HomeV2(props) {
           <div className={classes.toolbar} />
           <Switch>
             <SnackbarProvider maxSnack={3}>
-              <Route exact path="/home" render={() => <div>Home Page</div>} />
+              <Route exact path="/home" render={() => <Intro/>} />
               <Route path="/register" render={() => <Register/>} />
               <Route path="/users" render={() => <Users/>} />
               <Route path="/posts" render={() => <Posts/>} />
+              <Route path="/metrics" render={() => <Metrics/>} />
             </SnackbarProvider>
           </Switch>
         </main>
