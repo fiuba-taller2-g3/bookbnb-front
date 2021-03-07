@@ -106,14 +106,14 @@ export default function NativeSelects() {
     </LineChart>
   );
 
-  const renderBarChart = (
+  const renderBarChart = (color) => (
     <BarChart width={900} height={600} data={metricsData}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="value" barSize={20} fill="#8884d8" />
+      <Bar dataKey="value" barSize={20} fill={color}/>
     </BarChart>
   );
   
@@ -185,8 +185,8 @@ export default function NativeSelects() {
       </Grid>
       <Box paddingTop={6}>
         <Grid item xs={12}>
-          {showMetrics.posts && renderBarChart}
-          {showMetrics.bookings && renderBarChart}
+          {showMetrics.posts && renderBarChart("#8884d8")}
+          {showMetrics.bookings && renderBarChart("#43c745")}
         </Grid>
       </Box>
     </div>
