@@ -11,6 +11,7 @@ class PostsClient {
 
   getPosts = async () => { 
     const token = localStorage.getItem("token")
+    const url = postsUrl +'?includeBlocked=true'
     console.log("token valido")
     const requestConfig = {
       mode: 'cors',
@@ -19,7 +20,7 @@ class PostsClient {
         'API_TOKEN': token
       }
     };
-    const response = await fetch(postsUrl, requestConfig);
+    const response = await fetch(url, requestConfig);
     const posts = await response.json();
     return postsResponse(posts);
   }

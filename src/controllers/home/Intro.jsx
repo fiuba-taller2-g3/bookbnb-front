@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Image from 'material-ui-image'
 import homeImg from "./home.png";
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -18,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 500,
   },
   image: {
-    width: 128,
-    height: 128,
+    width: 50,
+    height: 50,
   },
   img: {
     margin: 'auto',
     display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
+    maxWidth: '80%',
+    maxHeight: '80%',
   },
 }));
 
@@ -34,12 +33,12 @@ export default function ComplexGrid() {
 
   return (
     <div className={classes.root}>
+        <Paper elevation={3}>
         <Grid container direction="row" justify="space-between">
-          <Grid item xs={6}>
-            <Image imageStyle={{width:'50', height: '50'}} src={homeImg}/>
-          </Grid>
-          <Grid item xs={6} sm container>
-            <Paper elevation={3}>
+            <Grid item xs={6}>
+              <img imageStyle={{width:'50', height: '50'}} src={homeImg}/>
+            </Grid>
+            <Grid item xs={6} sm container>
               <Box paddingTop={4} paddingLeft={1}>
                 <Container maxWidth="sm">
                   <Typography gutterBottom variant="h4">
@@ -50,9 +49,9 @@ export default function ComplexGrid() {
                   </Typography>
                 </Container>
               </Box>
-            </Paper>
-          </Grid>
+            </Grid>
         </Grid>
+      </Paper>
     </div>
   );
 }

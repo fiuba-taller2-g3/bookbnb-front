@@ -96,21 +96,11 @@ export default function NativeSelects() {
    }
   }
 
-  const renderLineChart = (
-    <LineChart width={900} height={600} data={metricsData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-      <Line type="monotone" dataKey="value" stroke="#8884d8" />
-      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-    </LineChart>
-  );
-
   const renderBarChart = (color) => (
     <BarChart width={900} height={600} data={metricsData}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
-      <YAxis />
+      <YAxis allowDecimals={false}/>
       <Tooltip />
       <Legend />
       <Bar dataKey="value" barSize={20} fill={color}/>

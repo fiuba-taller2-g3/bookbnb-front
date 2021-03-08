@@ -76,7 +76,7 @@ export default function AlignItemsList(){
 
   const handlePostUpdateResponse = (response) => {
     console.log(response.status)
-    if (response.status !== 200) {
+    if (response.status !== 200 && response.status !== 201) {
       handleError("error")
     }
     else {
