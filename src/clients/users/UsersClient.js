@@ -39,6 +39,21 @@ class UsersClient {
     return fetch(url, requestConfig).then(response => response.json())
   }
 
+  getUserBalance = (userId) => {
+    const token = localStorage.getItem("token")
+    console.log("getting user_id:", userId)
+    const url = usersUrl + `/${userId}` + `/balance`
+    const requestConfig = {
+      mode: 'cors',
+      method: 'GET',
+      headers: {
+        'API_TOKEN': token
+      }
+    };
+    return fetch(url, requestConfig).then(response => response.json())
+
+  }
+
   updateUserStatus = (userId, userStatus) => {
     const id = userId
     const status = userStatus
