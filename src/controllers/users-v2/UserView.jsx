@@ -43,9 +43,10 @@ export default class UserView extends Component{
   };
 
   render () {
-    const user = this.props.user;
+    const user = this.props.user
+    const balance = this.props.balance
     const open = user ? true : false
-    const birthDate = Moment(user.birth_date, 'YYYY-MM-DD HH:mm Z').format('DD/MM/YYYY');
+    const birthDate = Moment(user.birth_date, 'YYYY-MM-DD HH:mm Z').format('DD/MM/YYYY')
     const state = user.is_blocked ? "bloqueado" : "activo"
     
     return (
@@ -88,6 +89,9 @@ export default class UserView extends Component{
             <Divider />
             <ListItem button>
               <ListItemText primary="Teléfono" secondary={user.phone_number}/>
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Saldo" secondary={balance}/>
             </ListItem>
             <ListItem button>
               <ListItemText primary="Estado" secondary={state}/>

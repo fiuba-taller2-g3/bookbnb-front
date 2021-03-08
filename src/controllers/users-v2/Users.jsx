@@ -32,6 +32,7 @@ export default function AlignItemsList(){
   const [usersData, setUsersData] = useState([])
   const [user, setUser] = useState({})
   const [userId, setUserId] = useState({})
+  const [userBalance, setUserBalance] = useState()
   const [showUser, setShowUser] = useState(false)
   const [showWallet, setShowWallet] = useState(false)
   const [updateUser, setUpdateUser] = useState(false)
@@ -77,6 +78,16 @@ export default function AlignItemsList(){
     }
   }
 
+  const handleUserBalanceResponse = (response) => {
+    if (response.error) {
+      handleError(response.error)
+    } 
+    else {
+      console.log('UserData:', response)
+      setUserBalance(response.balance)
+    }
+  }
+
   const handleUserUpdateResponse = (response) => {
     console.log(response.status)
     if (response.error) {
@@ -98,6 +109,7 @@ export default function AlignItemsList(){
   const getUser = (id) => {
     if (tokenChecker()) {
       console.log('user_id:')
+      UsersClient.getUserBalance(id).then(handleUserBalanceResponse)
       UsersClient.getUserProfile(id).then(handleUserResponse)
     } 
     else { handleLogout() }
@@ -166,7 +178,7 @@ export default function AlignItemsList(){
           </div>
         </div>
       )):""}
-       {showUser && <UserView user={user} showUser={handleCloseUserView}/>}
+       {showUser && <UserView user={user} balance={userBalance} showUser={handleCloseUserView}/>}
        {showWallet && <WalletView id={user.wallet_id} open={true} showWallet={handleCloseWalletView}/>}
     </List>
   );
