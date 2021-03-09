@@ -74,6 +74,7 @@ export default function AlignItemsList(){
     } 
     else {
       console.log('UserData:', response)
+      UsersClient.getUserBalance(response.wallet_id).then(handleUserBalanceResponse)
       setUser(response)
     }
   }
@@ -109,7 +110,6 @@ export default function AlignItemsList(){
   const getUser = (id) => {
     if (tokenChecker()) {
       console.log('user_id:')
-      UsersClient.getUserBalance(id).then(handleUserBalanceResponse)
       UsersClient.getUserProfile(id).then(handleUserResponse)
     } 
     else { handleLogout() }

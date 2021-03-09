@@ -39,10 +39,10 @@ class UsersClient {
     return fetch(url, requestConfig).then(response => response.json())
   }
 
-  getUserBalance = (userId) => {
+  getUserBalance = (userWalletId) => {
     const token = localStorage.getItem("token")
-    console.log("getting user_id:", userId)
-    const url = usersUrl + `/${userId}` + `/balance`
+    console.log("getting balance wallet_id:", userWalletId)
+    const url = usersUrl + `/${userWalletId}` + `/balance`
     const requestConfig = {
       mode: 'cors',
       method: 'GET',
